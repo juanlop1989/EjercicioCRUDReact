@@ -4,6 +4,19 @@ import axios from "axios";
 
 
 const ShowUsers =() => {
+
+    const [users, setUsers] = useState([])
+    const url = "https://api.escuelajs.co/api/v1/users";
+
+    const getUsers = async () => {               
+        const responsive = await axios.get(url);
+        setUsers(responsive.data)
+    }
+
+    useEffect(() => {getUsers() 
+        getUsers()
+    })
+
     return(
         <div className="App">
             <div className="row mt-3">
@@ -23,16 +36,27 @@ const ShowUsers =() => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Correo</th>
-                                    <th>Contraseña</th>
+                                    <th>Correo Electrónico</th>
                                     <th>Nombre</th>
+                                    <th>Password</th>
                                     <th>Rol</th>
                                     <th>Avatar</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody className="table-gruop-divider">
-
+                                {
+                                    users.map((users, i) => (
+                                        <tr key={users.id}>
+                                            <td>{i + 1}</td>
+                                            <td>{users.email}</td>
+                                            <td>{users.name}</td>
+                                            <td>{users.password}</td>
+                                            <td>{users.role}</td>
+                                            <td>{users.avatar}</td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -65,6 +89,20 @@ const ShowUsers =() => {
                                 </span>
                                 <input type="text" id="contrasena" className="form-control" placeholder="Contraseña"></input>
                             </div>
+                            <div className="input-group mb-3">
+                                <span className="input-group-text">
+                                    <i class="fa-solid fa-user-astronaut"></i>
+                                </span>
+                                <input type="text" id="avatar" className="form-control" placeholder="Avatar"></input>
+                            </div>
+                            <div className="modal-footer">
+                                <button className="btn btn-success">
+                                    <i className="fa-solid fa-floppy-disk"></i> Guardar
+                                </button>
+                                <button id="cerrarModal" className="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                               
+                            </div>
+                           
                         </div>
                     </div>
                 </div>
