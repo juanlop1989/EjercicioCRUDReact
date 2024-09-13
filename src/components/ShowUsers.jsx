@@ -6,8 +6,17 @@ import axios from "axios";
 const ShowUsers =() => {
 
     const [users, setUsers] = useState([])
+    const [id, setId] = useState("")
+    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
+    const [rol, setRol] = useState("")
+    const [nameModal, setNameModal] = useState("")
+    const [operation, setOperation] = useState(1)
+
     const url = "https://api.escuelajs.co/api/v1/users";
 
+
+    //Obtener listado desde la Api
     const getUsers = async () => {               
         const responsive = await axios.get(url);
         setUsers(responsive.data)
@@ -16,6 +25,33 @@ const ShowUsers =() => {
     useEffect(() => {getUsers() 
         getUsers()
     })
+
+    /**
+     * Abre el modal con los atributos del Usuario,si se va Editar se cargan los datos
+     * @param {number} operation - N 1 para agregar, 2 para editar
+     * @param {number} id 
+     * @param {string} email 
+     * @param {string} name 
+     * @param {string} rol 
+     */
+    const openModal = (operation, id, email, name, rol) => {
+        setId("")
+        setEmail("")
+        setName("")
+        setRol("")
+
+        if (operation === 1){
+            setNameModal("Registrar Usuario")
+            setOperation(1)
+        }else if (operation === 2) {
+            setNameModal("Editar Usuario")
+            setOperation(2)
+            setId(id)
+            setEmail(email)
+            setName(name)
+            setRol(rol)
+        }
+    }
 
     return(
         <div className="App">
@@ -53,7 +89,15 @@ const ShowUsers =() => {
                                             <td>{users.name}</td>
                                             <td>{users.password}</td>
                                             <td>{users.role}</td>
-                                            <td>{users.avatar}</td>
+                                            <td>Imagen</td>
+                                            <td>
+                                                <button onClick={() => openModal(2, users.id, users.email, users.name, users.rol)} className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalUsuarios">
+                                                    <i className="fa-solid fa-edit"></i>
+                                                </button>
+                                                <button className="btn btn-danger m-1">
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))
                                 }
@@ -66,7 +110,8 @@ const ShowUsers =() => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <label className="h5">Agregar / Editar Usuario</label>
+                            <label className="h5">{nameModal}</label>
+                            minuto 54
                             <button className="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                         </div>
                         <div className="modal-body">
